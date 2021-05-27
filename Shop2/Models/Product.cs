@@ -4,22 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shop2.Models.Items
+namespace Shop2.Models
 {
-    public class Item
+    public class Product
     {
+
+        public Product()
+        {
+
+        }
+
         public string Name { get; set; }
-        private int Stock { get; set; }
+        public int Stock { get; set; }
         public double Price { get; set; }
-        
+
         public void AddItem(int amount)
         {
-            this.Stock += amount;
+            Stock += amount;
         }
 
         public void RemoveItem(int amount)
         {
-            if(this.Stock >= amount)
+            if (this.Stock >= amount)
             {
                 this.Stock -= amount;
             }

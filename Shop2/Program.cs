@@ -1,6 +1,5 @@
 ﻿using Shop2.Commands;
-using Shop2.Models.Items;
-using Shop2.Models.Shops;
+using Shop2.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +19,7 @@ namespace Shop2
         {
             Init();
             string command = "";
-            
+
 
             while (command != "exit")
             {
@@ -30,31 +29,43 @@ namespace Shop2
                 switch (req[0])
                 {
                     case "help":
-                        Help.Print(session);
+                        UserCommands.Help(session);
                         break;
 
                     case "login":
-                        session.CurrentUser = Login.LoginTo(req, users, session.CurrentUser);
+                        session.CurrentUser = UserCommands.Login(req, users, session.CurrentUser);
                         break;
 
                     case "logout":
                         session.CurrentUser = null;
                         break;
 
+                    case "listShops":
+                        ShopCommands.ListShops(shops, session);
+                        break;
+
+                    case "selectShop":
+                        session.CurrentUser.currentShop = ShopCommands.SelectShop(shops, session, req);
+                        break;
+
+                    case "balance":
+                        UserCommands.Balance(session);
+                        break;
+
+                    case "listProducts":
+                        ProductCommands.ListProducts(session);
+                        break;
+
                     case "buy":
-
+                        ProductCommands.Buy(session, req);
                         break;
 
-                    case "list":
-
+                    case "restock":
+                        ProductCommands.Restock(session, req);
                         break;
 
-                    case "bal":
-
-                        break;
-
-                    case "addbal":
-
+                    case "addBalance":
+                        UserCommands.AddBalance(session, users, req);
                         break;
 
                     default:
@@ -69,26 +80,72 @@ namespace Shop2
                 new User()
                 {
                     Name = "Vardenis",
-                    Bal = 500,
+                    Balance = 500,
                     IsAdmin = false
                 });
             users.Add(
                 new User()
                 {
                     Name = "Admin",
-                    Bal = 999,
+                    Balance = 999,
                     IsAdmin = true
                 });
 
-            List<Item> candies = new List<Item>() { };
-            List<Item> books = new List<Item>() { };
-            List<Item> products = new List<Item>() { };
+            List<Product> products1 = new List<Product>() {
+                new Product()
+                {
+                    Name = "Candies",
+                    Price = 5.5D,
+                    Stock = 50
+                },
+                new Product()
+                {
+                    Name = "Books",
+                    Price = 80D,
+                    Stock = 10
+                },
+                new Product()
+                {
+                    Name = "Apples",
+                    Price = 3.20D,
+                    Stock = 50
+                }
+            };
+
+            List<Product> products2 = new List<Product>() {
+                new Product()
+                {
+                    Name = "Meats",
+                    Price = 80D,
+                    Stock = 50
+                },
+                new Product()
+                {
+                    Name = "Pens",
+                    Price = 1.10D,
+                    Stock = 150
+                },
+                new Product()
+                {
+                    Name = "Rice",
+                    Price = 0.02D,
+                    Stock = 8000
+                }
+            };
+
 
             shops.Add(
                 new Shop()
                 {
                     Name = "Iki",
-                    Items = products
+                    Items = products1
+                });
+
+            shops.Add(
+                new Shop()
+                {
+                    Name = "Maxima",
+                    Items = products2
                 });
         }
     }
