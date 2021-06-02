@@ -1,4 +1,5 @@
-﻿using Shop2.Models;
+﻿using Shop2.Interfaces;
+using Shop2.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,28 +10,28 @@ namespace Shop2.Commands
 {
     class ShopCommands
     {
-        public static void ListShops(List<Shop> shops, Session session)
+        public static void ListShops(List<Shop> shops, Session session, ILogger logger)
         {
             if (session.CurrentUser != null)
             {
-                Console.WriteLine("Shops:");
+                logger.Write("Shops:");
                 foreach (Shop shop in shops)
                 {
-                    Console.WriteLine(shop.Name);
+                    logger.Write(shop.Name);
                 }
             }
             else
             {
-                Console.WriteLine("Invalid command");
+                logger.Write("Invalid command");
             }
         }
 
-        public static Shop SelectShop(List<Shop> shops, Session session, String[] req)
+        public static Shop SelectShop(List<Shop> shops, Session session, String[] req, ILogger logger)
         {
             Shop shop = null;
             if (req.Length < 2)
             {
-                Console.WriteLine("Missing name");
+                logger.Write("Missing name");
                 return null;
             }
             if (session.CurrentUser != null)
@@ -38,12 +39,12 @@ namespace Shop2.Commands
                 shop = shops.Where(i => i.Name == req[1]).FirstOrDefault();
                 if (shop == null)
                 {
-                    Console.WriteLine("User not found");
+                    logger.Write("User not found");
                 }
             }
             else
             {
-                Console.WriteLine("Invalid command");
+                logger.Write("Invalid command");
             }
             return shop;
         }

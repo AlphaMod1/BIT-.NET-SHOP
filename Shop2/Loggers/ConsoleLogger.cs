@@ -5,10 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shop2
+namespace Shop2.Loggers
 {
-    public class Session
+    class ConsoleLogger : ILogger
     {
-        public User CurrentUser { get; set; }
+        public void Write(string input)
+        {
+            Console.WriteLine(input);
+        }
     }
 }

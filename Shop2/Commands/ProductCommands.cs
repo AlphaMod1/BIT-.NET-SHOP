@@ -1,4 +1,5 @@
-﻿using Shop2.Models;
+﻿using Shop2.Interfaces;
+using Shop2.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,24 +10,24 @@ namespace Shop2.Commands
 {
     class ProductCommands
     {
-        public static void ListProducts(Session session)
+        public static void ListProducts(Session session, ILogger logger)
         {
             if (session.CurrentUser != null && session.CurrentUser.currentShop != null)
             {
-                Console.WriteLine("Products:");
-                Console.WriteLine("Name\t|Price\t|Stock");
-                Console.WriteLine("=========================");
+                logger.Write("Products:");
+                logger.Write("Name\t|Price\t|Stock");
+                logger.Write("=========================");
                 foreach (Product product in session.CurrentUser.currentShop.Items)
                 {
-                    Console.WriteLine($"{product.Name}\t|{product.Price}$\t|{product.Stock}");
+                    logger.Write($"{product.Name}\t|{product.Price}$\t|{product.Stock}");
                 }
             }
             else
             {
-                Console.WriteLine("Invalid command");
+                logger.Write("Invalid command");
             }
         }
-        public static void Buy(Session session, String[] req)
+        public static void Buy(Session session, String[] req, ILogger logger)
         {
             if (session.CurrentUser != null && !session.CurrentUser.IsAdmin &&
                 session.CurrentUser.currentShop != null && req.Length <= 3)
@@ -44,26 +45,26 @@ namespace Shop2.Commands
                         }
                         else
                         {
-                            Console.WriteLine("Insufficient balance");
+                            logger.Write("Insufficient balance");
                         }
                     }
                     else
                     {
-                        Console.WriteLine("Product not found");
+                        logger.Write("Product not found");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Invalid amount");
+                    logger.Write("Invalid amount");
                 }
             }
             else
             {
-                Console.WriteLine("Invalid command");
+                logger.Write("Invalid command");
             }
 
         }
-        public static void Restock(Session session, String[] req)
+        public static void Restock(Session session, String[] req, ILogger logger)
         {
             if (session.CurrentUser != null && session.CurrentUser.IsAdmin &&
                 session.CurrentUser.currentShop != null && req.Length <= 3)
@@ -78,17 +79,17 @@ namespace Shop2.Commands
                     }
                     else
                     {
-                        Console.WriteLine("Product not found");
+                        logger.Write("Product not found");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Invalid amount");
+                    logger.Write("Invalid amount");
                 }
             }
             else
             {
-                Console.WriteLine("Invalid command");
+                logger.Write("Invalid command");
             }
         }
 

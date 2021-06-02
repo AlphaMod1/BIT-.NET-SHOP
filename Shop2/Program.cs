@@ -1,4 +1,6 @@
 ﻿using Shop2.Commands;
+using Shop2.Interfaces;
+using Shop2.Loggers;
 using Shop2.Models;
 using System;
 using System.Collections.Generic;
@@ -8,6 +10,8 @@ namespace Shop2
 {
     class Program
     {
+        public static ILogger logger = new ConsoleLogger();
+        //public static ILogger logger = new FileLogger("C:/Users/Liutauras/Downloads/Teorija/test.txt");
         public static List<User> users = new List<User>();
         public static List<Shop> shops = new List<Shop>();
         public static Session session = new Session()
@@ -29,11 +33,11 @@ namespace Shop2
                 switch (req[0])
                 {
                     case "help":
-                        UserCommands.Help(session);
+                        UserCommands.Help(session, logger);
                         break;
 
                     case "login":
-                        session.CurrentUser = UserCommands.Login(req, users, session.CurrentUser);
+                        session.CurrentUser = UserCommands.Login(req, users, session.CurrentUser, logger);
                         break;
 
                     case "logout":
@@ -41,35 +45,38 @@ namespace Shop2
                         break;
 
                     case "listShops":
-                        ShopCommands.ListShops(shops, session);
+                        ShopCommands.ListShops(shops, session, logger);
                         break;
 
                     case "selectShop":
-                        session.CurrentUser.currentShop = ShopCommands.SelectShop(shops, session, req);
+                        session.CurrentUser.currentShop = ShopCommands.SelectShop(shops, session, req, logger);
                         break;
 
                     case "balance":
-                        UserCommands.Balance(session);
+                        UserCommands.Balance(session, logger);
                         break;
 
                     case "listProducts":
-                        ProductCommands.ListProducts(session);
+                        ProductCommands.ListProducts(session, logger);
                         break;
 
                     case "buy":
-                        ProductCommands.Buy(session, req);
+                        ProductCommands.Buy(session, req, logger);
                         break;
 
                     case "restock":
-                        ProductCommands.Restock(session, req);
+                        ProductCommands.Restock(session, req, logger);
                         break;
 
                     case "addBalance":
-                        UserCommands.AddBalance(session, users, req);
+                        UserCommands.AddBalance(session, users, req, logger);
+                        break;
+
+                    case "exit":
                         break;
 
                     default:
-                        Console.WriteLine("Unknown command");
+                        logger.Write("Unknown command");
                         break;
                 }
             }
